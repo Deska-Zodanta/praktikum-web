@@ -1,0 +1,317 @@
+MariaDB [(none)]> create database perpustakaan_db;
+Query OK, 1 row affected (0.002 sec)
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| bdmodul10          |
+| bdmodul3           |
+| bdmodul4           |
+| brainz             |
+| db_universitas     |
+| dbms11_2310506014  |
+| information_schema |
+| modul4bd           |
+| mysql              |
+| performance_schema |
+| perpustakaan       |
+| perpustakaan_db    |
+| perpustakaan_modul |
+| phpmyadmin         |
+| test               |
+| tokoku             |
+| tokoku2            |
+| tugasmodul7        |
+| tugasmodule6       |
+| uas                |
++--------------------+
+20 rows in set (0.002 sec)
+
+MariaDB [(none)]> use perpustakaan_db;
+Database changed
+MariaDB [perpustakaan_db]> create table Anggota (
+    -> id_anggota INT AUTO_INCREMENT PRIMARY KEY,
+    -> nama VARCHAR(100) NOT NULL,
+    -> alamat VARCHAR(255),
+    -> no_telp VARCHAR(15)
+    -> );
+Query OK, 0 rows affected (0.020 sec)
+
+MariaDB [perpustakaan_db]> CREATE TABLE Buku (
+    -> id_buku INT AUTO_INCREMENT PRIMARY KEY,
+    -> judul VARCHAR(150) NOT NULL,
+    -> pengarang VARCHAR(100),
+    -> kategori VARCHAR(50),
+    -> tahun_terbit YEAR
+    -> );
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [perpustakaan_db]> CREATE TABLE Peminjaman (
+    -> id_peminjaman INT AUTO_INCREMENT PRIMARY KEY,
+    -> id_anggota INT NOT NULL,
+    -> tanggal_pinjam DATE NOT NULL,
+    -> tanggal_kembali DATE,
+    -> FOREIGN KEY (id_anggota) REFERENCES Anggota(id_anggota)
+    -> );
+Query OK, 0 rows affected (0.031 sec)
+
+MariaDB [perpustakaan_db]> CREATE TABLE Detail_Peminjaman (
+    -> id_detail INT AUTO_INCREMENT PRIMARY KEY,
+    -> id_peminjaman INT NOT NULL,
+    -> id_buku INT NOT NULL,
+    -> jumlah INT DEFAULT 1,
+    -> FOREIGN KEY (id_peminjaman) REFERENCES Peminjaman(id_peminjaman),
+    -> FOREIGN KEY (id_buku) REFERENCES Buku(id_buku)
+    -> );
+Query OK, 0 rows affected (0.034 sec)
+
+MariaDB [perpustakaan_db]> show tables;
++---------------------------+
+| Tables_in_perpustakaan_db |
++---------------------------+
+| anggota                   |
+| buku                      |
+| detail_peminjaman         |
+| peminjaman                |
++---------------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [perpustakaan_db]> DESCRIBE anggota;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id_anggota | int(11)      | NO   | PRI | NULL    | auto_increment |
+| nama       | varchar(100) | NO   |     | NULL    |                |
+| alamat     | varchar(255) | YES  |     | NULL    |                |
+| no_telp    | varchar(15)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.030 sec)
+
+MariaDB [perpustakaan_db]> DESCRIBE buku;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id_buku      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| judul        | varchar(150) | NO   |     | NULL    |                |
+| pengarang    | varchar(100) | YES  |     | NULL    |                |
+| kategori     | varchar(50)  | YES  |     | NULL    |                |
+| tahun_terbit | year(4)      | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.033 sec)
+
+MariaDB [perpustakaan_db]> DESCRIBE  detail_peminjaman;
++---------------+---------+------+-----+---------+----------------+
+| Field         | Type    | Null | Key | Default | Extra          |
++---------------+---------+------+-----+---------+----------------+
+| id_detail     | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_peminjaman | int(11) | NO   | MUL | NULL    |                |
+| id_buku       | int(11) | NO   | MUL | NULL    |                |
+| jumlah        | int(11) | YES  |     | 1       |                |
++---------------+---------+------+-----+---------+----------------+
+4 rows in set (0.020 sec)
+
+MariaDB [perpustakaan_db]> DESCRIBE peminjaman;
++-----------------+---------+------+-----+---------+----------------+
+| Field           | Type    | Null | Key | Default | Extra          |
++-----------------+---------+------+-----+---------+----------------+
+| id_peminjaman   | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_anggota      | int(11) | NO   | MUL | NULL    |                |
+| tanggal_pinjam  | date    | NO   |     | NULL    |                |
+| tanggal_kembali | date    | YES  |     | NULL    |                |
++-----------------+---------+------+-----+---------+----------------+
+4 rows in set (0.019 sec)
+
+MariaDB [perpustakaan_db]> DESCRIBE anggota;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id_anggota | int(11)      | NO   | PRI | NULL    | auto_increment |
+| nama       | varchar(100) | NO   |     | NULL    |                |
+| alamat     | varchar(255) | YES  |     | NULL    |                |
+| no_telp    | varchar(15)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.021 sec)
+
+MariaDB [perpustakaan_db]> INSERT INTO Anggota (nama, alamat, no_telp) VALUES
+    -> ('Sardi Putra', 'Jl. Soepomo No. 55', '080987654321'),
+    -> ('Eka Andrina', 'Jl. Merdeka No. 2', '081258735432'),
+    -> ('Firdaus Maliki', 'Jl. Ahmad Yani No. 70', '083572345678'),
+    -> ('Citra Kirana', 'Jl. Imam Bonjol No. 10', '082362345451'),
+    -> ('Putra Rian', 'Jl. Thamrin No. 8', '083552345678');
+Query OK, 5 rows affected (0.010 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [perpustakaan_db]> describe anggota;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id_anggota | int(11)      | NO   | PRI | NULL    | auto_increment |
+| nama       | varchar(100) | NO   |     | NULL    |                |
+| alamat     | varchar(255) | YES  |     | NULL    |                |
+| no_telp    | varchar(15)  | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+4 rows in set (0.011 sec)
+
+MariaDB [perpustakaan_db]> select * from anggota;
++------------+----------------+------------------------+--------------+
+| id_anggota | nama           | alamat                 | no_telp      |
++------------+----------------+------------------------+--------------+
+|          1 | Sardi Putra    | Jl. Soepomo No. 55     | 080987654321 |
+|          2 | Eka Andrina    | Jl. Merdeka No. 2      | 081258735432 |
+|          3 | Firdaus Maliki | Jl. Ahmad Yani No. 70  | 083572345678 |
+|          4 | Citra Kirana   | Jl. Imam Bonjol No. 10 | 082362345451 |
+|          5 | Putra Rian     | Jl. Thamrin No. 8      | 083552345678 |
++------------+----------------+------------------------+--------------+
+5 rows in set (0.001 sec)
+
+MariaDB [perpustakaan_db]> describe buku;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id_buku      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| judul        | varchar(150) | NO   |     | NULL    |                |
+| pengarang    | varchar(100) | YES  |     | NULL    |                |
+| kategori     | varchar(50)  | YES  |     | NULL    |                |
+| tahun_terbit | year(4)      | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+5 rows in set (0.015 sec)
+
+MariaDB [perpustakaan_db]> INSERT INTO Buku (judul, pengarang, kategori, tahun_terbit) VALUES
+    -> ('Belajar Pemrograman Python untuk Pemula', 'John Smith','Teknologi', 2020),
+    -> ('Panduan Budidaya Ayam Petelur', 'Ahmad Ridwan','Peternakan', 2018),
+    -> ('Data Science Fundamental', 'Emily Johnson','Teknologi', 2021),
+    -> ('Demokrasi di Era Digital', 'Budi Santoso','Politik', 2022),
+    -> ('Budidaya Padi Organik', 'Dwi Ananda Putra','Pertanian', 2017);
+Query OK, 5 rows affected (0.003 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [perpustakaan_db]> select * from buku;
++---------+-----------------------------------------+------------------+------------+--------------+
+| id_buku | judul                                   | pengarang        | kategori   | tahun_terbit |
++---------+-----------------------------------------+------------------+------------+--------------+
+|       1 | Belajar Pemrograman Python untuk Pemula | John Smith       | Teknologi  |         2020 |
+|       2 | Panduan Budidaya Ayam Petelur           | Ahmad Ridwan     | Peternakan |         2018 |
+|       3 | Data Science Fundamental                | Emily Johnson    | Teknologi  |         2021 |
+|       4 | Demokrasi di Era Digital                | Budi Santoso     | Politik    |         2022 |
+|       5 | Budidaya Padi Organik                   | Dwi Ananda Putra | Pertanian  |         2017 |
++---------+-----------------------------------------+------------------+------------+--------------+
+5 rows in set (0.000 sec)
+
+MariaDB [perpustakaan_db]> describe peminjaman;
++-----------------+---------+------+-----+---------+----------------+
+| Field           | Type    | Null | Key | Default | Extra          |
++-----------------+---------+------+-----+---------+----------------+
+| id_peminjaman   | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_anggota      | int(11) | NO   | MUL | NULL    |                |
+| tanggal_pinjam  | date    | NO   |     | NULL    |                |
+| tanggal_kembali | date    | YES  |     | NULL    |                |
++-----------------+---------+------+-----+---------+----------------+
+4 rows in set (0.013 sec)
+
+MariaDB [perpustakaan_db]> INSERT INTO Peminjaman (id_anggota, tanggal_pinjam, tanggal_kembali) VALUES
+    -> (1, '2025-03-01', NULL),
+    -> (2, '2025-04-03', '2025-04-07'),
+    -> (3, '2025-04-10', '2025-04-15'),
+    -> (4, '2025-05-02', '2025-05-19'),
+    -> (5, '2025-05-14', NULL);
+Query OK, 5 rows affected (0.005 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [perpustakaan_db]> select * from peminjaman;
++---------------+------------+----------------+-----------------+
+| id_peminjaman | id_anggota | tanggal_pinjam | tanggal_kembali |
++---------------+------------+----------------+-----------------+
+|             1 |          1 | 2025-03-01     | NULL            |
+|             2 |          2 | 2025-04-03     | 2025-04-07      |
+|             3 |          3 | 2025-04-10     | 2025-04-15      |
+|             4 |          4 | 2025-05-02     | 2025-05-19      |
+|             5 |          5 | 2025-05-14     | NULL            |
++---------------+------------+----------------+-----------------+
+5 rows in set (0.000 sec)
+
+MariaDB [perpustakaan_db]> describe detail_peminjaman;
++---------------+---------+------+-----+---------+----------------+
+| Field         | Type    | Null | Key | Default | Extra          |
++---------------+---------+------+-----+---------+----------------+
+| id_detail     | int(11) | NO   | PRI | NULL    | auto_increment |
+| id_peminjaman | int(11) | NO   | MUL | NULL    |                |
+| id_buku       | int(11) | NO   | MUL | NULL    |                |
+| jumlah        | int(11) | YES  |     | 1       |                |
++---------------+---------+------+-----+---------+----------------+
+4 rows in set (0.015 sec)
+
+MariaDB [perpustakaan_db]> INSERT INTO Detail_Peminjaman (id_peminjaman, id_buku, jumlah) VALUES
+    -> (1, 2, 1),
+    -> (2, 1, 1),
+    -> (3, 2, 1),
+    -> (3, 5, 1),
+    -> (4, 3, 1),
+    -> (5, 4, 1);
+Query OK, 6 rows affected (0.009 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [perpustakaan_db]> select * from detail_peminjaman;
++-----------+---------------+---------+--------+
+| id_detail | id_peminjaman | id_buku | jumlah |
++-----------+---------------+---------+--------+
+|         1 |             1 |       2 |      1 |
+|         2 |             2 |       1 |      1 |
+|         3 |             3 |       2 |      1 |
+|         4 |             3 |       5 |      1 |
+|         5 |             4 |       3 |      1 |
+|         6 |             5 |       4 |      1 |
++-----------+---------------+---------+--------+
+6 rows in set (0.000 sec)
+
+MariaDB [perpustakaan_db]> SELECT p.id_peminjaman, a.nama, p.tanggal_pinjam, p.tanggal_kembali, b.judul
+    -> FROM Peminjaman p
+    -> JOIN Anggota a ON p.id_anggota = a.id_anggota
+    -> JOIN Detail_Peminjaman dp ON p.id_peminjaman = dp.id_peminjaman
+    -> JOIN Buku b ON dp.id_buku = b.id_buku;
++---------------+----------------+----------------+-----------------+-----------------------------------------+
+| id_peminjaman | nama           | tanggal_pinjam | tanggal_kembali | judul                                   |
++---------------+----------------+----------------+-----------------+-----------------------------------------+
+|             1 | Sardi Putra    | 2025-03-01     | NULL            | Panduan Budidaya Ayam Petelur           |
+|             2 | Eka Andrina    | 2025-04-03     | 2025-04-07      | Belajar Pemrograman Python untuk Pemula |
+|             3 | Firdaus Maliki | 2025-04-10     | 2025-04-15      | Panduan Budidaya Ayam Petelur           |
+|             3 | Firdaus Maliki | 2025-04-10     | 2025-04-15      | Budidaya Padi Organik                   |
+|             4 | Citra Kirana   | 2025-05-02     | 2025-05-19      | Data Science Fundamental                |
+|             5 | Putra Rian     | 2025-05-14     | NULL            | Demokrasi di Era Digital                |
++---------------+----------------+----------------+-----------------+-----------------------------------------+
+6 rows in set (0.001 sec)
+
+MariaDB [perpustakaan_db]> SELECT * FROM Peminjaman
+    -> WHERE tanggal_kembali IS NULL;
++---------------+------------+----------------+-----------------+
+| id_peminjaman | id_anggota | tanggal_pinjam | tanggal_kembali |
++---------------+------------+----------------+-----------------+
+|             1 |          1 | 2025-03-01     | NULL            |
+|             5 |          5 | 2025-05-14     | NULL            |
++---------------+------------+----------------+-----------------+
+2 rows in set (0.000 sec)
+
+MariaDB [perpustakaan_db]> SELECT a.nama, COUNT(p.id_peminjaman) AS total_peminjaman
+    -> FROM Anggota a
+    -> JOIN Peminjaman p ON a.id_anggota = p.id_anggota
+    -> GROUP BY a.nama;
++----------------+------------------+
+| nama           | total_peminjaman |
++----------------+------------------+
+| Citra Kirana   |                1 |
+| Eka Andrina    |                1 |
+| Firdaus Maliki |                1 |
+| Putra Rian     |                1 |
+| Sardi Putra    |                1 |
++----------------+------------------+
+5 rows in set (0.001 sec)
+
+MariaDB [perpustakaan_db]> SELECT SUM(jumlah) AS total_buku_dipinjam FROM Detail_Peminjaman;
++---------------------+
+| total_buku_dipinjam |
++---------------------+
+|                   6 |
++---------------------+
+1 row in set (0.000 sec)
+
+MariaDB [perpustakaan_db]>
